@@ -44,10 +44,8 @@ public class ReceiveMessage extends Thread
 				Utils.utils.WriteOriginMessage(str);
 				//解析消息，存入数据库
 				if(Utils.utils.AnalyzeMessage(str, ds))
-				{
 					//将设置好的消息写入数据库
 					Utils.utils.WriteControlMessage(ds);
-				}
 				//刷新当前线程的记录时间
 				RefreshTime();
 			}
