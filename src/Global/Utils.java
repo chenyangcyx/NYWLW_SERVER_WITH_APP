@@ -51,9 +51,10 @@ public class Utils
 	{
 		PreparedStatement pre=null;
 		try{
-			pre=conn.prepareStatement("insert into "+MySqlPara.global_mp.OriginalMessage_TableName+" values(?,?)");
+			pre=conn.prepareStatement("insert into "+MySqlPara.global_mp.OriginalMessage_TableName+" values(?,?,?)");
 			pre.setString(1, GetCurrentTime());
-			pre.setString(2, mess);
+			pre.setString(2, String.valueOf(System.currentTimeMillis()));
+			pre.setString(3, mess);
 			pre.executeUpdate();
 			SendSystemMessage("原始消息："+mess);
 		} catch (Exception e) {
@@ -67,10 +68,11 @@ public class Utils
 		PreparedStatement pre=null;
 		try
 		{
-			pre=conn.prepareStatement("insert into "+MySqlPara.global_mp.ControlMessage_TableName+" values(?,?,?)");
+			pre=conn.prepareStatement("insert into "+MySqlPara.global_mp.ControlMessage_TableName+" values(?,?,?,?)");
 			pre.setString(1, GetCurrentTime());
-			pre.setString(2, ds.getMess());
-			pre.setString(3, "0");
+			pre.setString(2, String.valueOf(System.currentTimeMillis()));
+			pre.setString(3, ds.getMess());
+			pre.setString(4, "0");
 			pre.executeUpdate();
 			SendSystemMessage("写入数据库"+MySqlPara.global_mp.DataMessage_TableName+"：控制信息："+ds.getMess());
 		}
