@@ -14,7 +14,8 @@ public class Distribute extends Thread
 	public void Handle(Socket so)
 	{
 		//开启接收消息线程
-		Utils.utils.SendSystemMessage("开启消息接收线程");
+		Utils.utils.RecordSystemMessage("开启消息接收线程！");
+		Utils.utils.SendSystemMessage();
 		ReceiveMessage t=new ReceiveMessage(so);
 		all_thread.add(t);
 		t.start();
@@ -36,14 +37,17 @@ public class Distribute extends Thread
 				ReceiveMessage t=all_thread.get(i);
 				if(Utils.utils.GetTimeByLong()-t.GetThreadTime()>=ConnectPara.global_cp.thread_timeout_time)
 				{
-					Utils.utils.SendSystemMessage("线程"+t.getName()+"超时，撤销该线程！剩余"+(all_thread.size()-1)+"个线程！");
-					all_thread.remove(i);
+					Utils.utils.RecordSystemMessage("线程"+t.getName()+"超时，撤销该线程！剩余"+(all_thread.size()-1)+"个线程！");
+					Utils.utils.SendSystemMessage();
 					try {
 						t.so.close();
 						t.stop();
 					} catch (Exception e) {
 						Utils.utils.HandleException(e);
 					}
+					t.RecycleThisThread();
+					all_thread.remove(i);
+					System.gc();
 				}
 			}
 		}

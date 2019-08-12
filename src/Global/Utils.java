@@ -12,20 +12,25 @@ public class Utils
 	
 	Connection conn = null;
 	
+	StringBuilder send_mess=new StringBuilder();
+	String sep=System.getProperty("line.separator");
+	
 	//默认构造函数
 	Utils()
 	{
 		try
 	    {
 			// 打开链接
-			SendSystemMessage("开始连接数据库");
+			RecordSystemMessage("开始连接数据库");
+			SendSystemMessage();
 	    	// 注册 JDBC 驱动
 		    Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(MySqlPara.global_mp.SQLAddress,MySqlPara.global_mp.SQLAccount,MySqlPara.global_mp.SQLPassword);
 			if(!conn.isClosed())
-				SendSystemMessage("连接数据库成功！");
+				RecordSystemMessage("连接数据库成功！");
 			else
-				SendSystemMessage("连接数据库失败！");
+				RecordSystemMessage("连接数据库失败！");
+			SendSystemMessage();
 		}
 	    catch (Exception e)
 	    {
@@ -56,7 +61,7 @@ public class Utils
 			pre.setString(2, String.valueOf(System.currentTimeMillis()));
 			pre.setString(3, mess);
 			pre.executeUpdate();
-			SendSystemMessage("原始消息："+mess);
+			RecordSystemMessage("原始消息："+mess+sep);
 		} catch (Exception e) {
 			Utils.utils.HandleException(e);
 		}
@@ -74,7 +79,8 @@ public class Utils
 			pre.setString(3, ds.getMess());
 			pre.setString(4, "0");
 			pre.executeUpdate();
-			SendSystemMessage("写入数据库"+MySqlPara.global_mp.DataMessage_TableName+"：控制信息："+ds.getMess());
+			RecordSystemMessage("写入数据库"+MySqlPara.global_mp.DataMessage_TableName+"：控制信息："+ds.getMess());
+			Utils.utils.SendSystemMessage();
 		}
 		catch (Exception e)
 		{
@@ -89,21 +95,31 @@ public class Utils
 			return false;
 		String mess=str.substring(str.indexOf("control:")+"control:".length());
 		ds.setMess(mess);
-		SendSystemMessage("消息解析完成！");
+		RecordSystemMessage("消息解析完成！");
+		Utils.utils.SendSystemMessage();
 		return true;
 	}
 	
-	//发送系统消息
-	public void SendSystemMessage(String str)
+	//记录系统消息
+	public void RecordSystemMessage(String str)
 	{
-		System.out.println(GetCurrentTime());
-		System.out.println(str);
+		if(send_mess.length()==0)
+			send_mess.append(GetCurrentTime()).append(sep);
+		send_mess.append(str);
+	}
+	
+	//发送系统消息
+	public void SendSystemMessage()
+	{
+		System.out.println(send_mess);
 		System.out.println();
+		send_mess.delete(0, send_mess.length());
 	}
 	
 	//统一异常处理
 	public void HandleException(Exception e)
 	{
-		SendSystemMessage("捕获异常："+e.toString().substring(0, e.toString().indexOf(":")));
+		RecordSystemMessage("捕获异常："+e.toString().substring(0, e.toString().indexOf(":")));
+		Utils.utils.SendSystemMessage();
 	}
 }
