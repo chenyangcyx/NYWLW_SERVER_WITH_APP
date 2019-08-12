@@ -63,7 +63,7 @@ public class Utils
 			pre.executeUpdate();
 			RecordSystemMessage("原始消息："+mess+sep);
 		} catch (Exception e) {
-			Utils.utils.HandleException(e);
+			HandleException(e);
 		}
 	}
 	
@@ -80,11 +80,11 @@ public class Utils
 			pre.setString(4, "0");
 			pre.executeUpdate();
 			RecordSystemMessage("写入数据库"+MySqlPara.global_mp.DataMessage_TableName+"：控制信息："+ds.getMess());
-			Utils.utils.SendSystemMessage();
+			SendSystemMessage();
 		}
 		catch (Exception e)
 		{
-			Utils.utils.HandleException(e);
+			HandleException(e);
 		}
 	}
 	
@@ -96,7 +96,7 @@ public class Utils
 		String mess=str.substring(str.indexOf("control:")+"control:".length());
 		ds.setMess(mess);
 		RecordSystemMessage("消息解析完成！");
-		Utils.utils.SendSystemMessage();
+		SendSystemMessage();
 		return true;
 	}
 	
