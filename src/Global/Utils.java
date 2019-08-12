@@ -120,6 +120,6 @@ public class Utils
 	public void HandleException(Exception e)
 	{
 		RecordSystemMessage("捕获异常："+e.toString().substring(0, e.toString().indexOf(":")));
-		Utils.utils.SendSystemMessage();
+		SendSystemMessage();
 	}
 }
