@@ -11,7 +11,6 @@ public class Utils
 	public static Utils utils=new Utils();
 	
 	Connection conn = null;
-	PreparedStatement pre=null;
 	
 	StringBuilder send_mess=new StringBuilder();
 	String sep=System.getProperty("line.separator");
@@ -55,12 +54,14 @@ public class Utils
 	//写入originmessage
 	public void WriteOriginMessage(String mess)
 	{
+		PreparedStatement pre;
 		try{
 			pre=conn.prepareStatement("insert into "+MySqlPara.global_mp.OriginalMessage_TableName+" values(?,?,?)");
 			pre.setString(1, GetCurrentTime());
 			pre.setString(2, String.valueOf(System.currentTimeMillis()));
 			pre.setString(3, mess);
 			pre.executeUpdate();
+			pre.close();
 			RecordSystemMessage("原始消息："+mess+sep);
 		} catch (Exception e) {
 			HandleException(e);
@@ -70,6 +71,7 @@ public class Utils
 	//写入controlmessage
 	public void WriteControlMessage(ReceiveDataStruct ds)
 	{
+		PreparedStatement pre;
 		try
 		{
 			pre=conn.prepareStatement("insert into "+MySqlPara.global_mp.ControlMessage_TableName+" values(?,?,?,?)");
@@ -78,6 +80,7 @@ public class Utils
 			pre.setString(3, ds.getMess());
 			pre.setString(4, "0");
 			pre.executeUpdate();
+			pre.close();
 			RecordSystemMessage("写入数据库"+MySqlPara.global_mp.DataMessage_TableName+"：控制信息："+ds.getMess());
 			SendSystemMessage();
 		}
