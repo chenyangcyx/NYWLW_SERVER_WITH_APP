@@ -45,8 +45,8 @@ public class Distribute extends Thread
 					} catch (Exception e) {
 						Utils.utils.HandleException(e);
 					}
-					t.RecycleThisThread();
 					all_thread.remove(i);
+					t=null;
 					System.gc();
 				}
 			}

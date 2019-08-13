@@ -11,6 +11,7 @@ public class Utils
 	public static Utils utils=new Utils();
 	
 	Connection conn = null;
+	PreparedStatement pre=null;
 	
 	StringBuilder send_mess=new StringBuilder();
 	String sep=System.getProperty("line.separator");
@@ -54,7 +55,6 @@ public class Utils
 	//写入originmessage
 	public void WriteOriginMessage(String mess)
 	{
-		PreparedStatement pre=null;
 		try{
 			pre=conn.prepareStatement("insert into "+MySqlPara.global_mp.OriginalMessage_TableName+" values(?,?,?)");
 			pre.setString(1, GetCurrentTime());
@@ -70,7 +70,6 @@ public class Utils
 	//写入controlmessage
 	public void WriteControlMessage(ReceiveDataStruct ds)
 	{
-		PreparedStatement pre=null;
 		try
 		{
 			pre=conn.prepareStatement("insert into "+MySqlPara.global_mp.ControlMessage_TableName+" values(?,?,?,?)");
